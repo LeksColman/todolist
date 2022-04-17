@@ -34,8 +34,12 @@ function App() {
         tasks[todolistID] = tasks[todolistID].filter( (el) => el.id !== taskID)
         setTasks({...tasks})
     }
+    let [title, setTitle] = useState('')
     const addTodolist = () => {
-
+        let newTodolistID = v1()
+        setTodolists([{id: newTodolistID, title: title, filter: 'all'}, ...todolists])
+        setTasks({[newTodolistID]:[],...tasks})
+        setTitle('')
     }
     const removeTodolist = (todolistID: string) => {
         setTodolists(todolists.filter(t => t.id !== todolistID))
@@ -43,15 +47,16 @@ function App() {
     }
 
     return (
-        <>
+        <div>
             <div className={s.todolistField}>
                 <div>{'Add NEW Todolist'}</div>
                 <>
-                    <input />
-                    <button >{'+'}</button>
+                    <input value={title} onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                        setTitle(e.currentTarget.value)}}/>
+                    <button onClick={addTodolist}>{'+'}</button>
                 </>
             </div>
-            <div className='App'>
+            <div className={'App'}>
                 {todolists.map((td) =>
                     <Todolist
                         key={td.id}
@@ -63,7 +68,7 @@ function App() {
                         removeTodolist={removeTodolist}
                     />)}
             </div>
-        </>
+        </div>
     );
 }
 
