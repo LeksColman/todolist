@@ -1,0 +1,8 @@
+.todolistField {
+    width: auto;
+    margin: 10px;
+    background: #fc0;
+    border: 5px solid #fc0;
+    outline: 2px solid #000;
+    border-radius: 10px;
+}
