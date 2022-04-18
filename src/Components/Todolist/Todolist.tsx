@@ -1,5 +1,6 @@
-import React, {useState} from 'react';
+import React from 'react';
 import s from './Todolist.module.css'
+import {InputUniversal} from "../InputUniversal/InputUniversal";
 
 export type TasksPropsType = {
     id: string
@@ -17,15 +18,7 @@ export type TodolistPropsType = {
 }
 
 export const Todolist = (props: TodolistPropsType) => {
-    let [text, setText] = useState('')
 
-    const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setText(e.currentTarget.value)
-    }
-    const onClickHandlerAddTask = () => {
-        props.addTask(props.id, text)
-        setText('')
-    }
     const onClickHandlerRemoveTask = (taskID: string) => {
         props.removeTask(props.id, taskID)
     }
@@ -42,10 +35,12 @@ export const Todolist = (props: TodolistPropsType) => {
                     {'x'}
                 </button>
             </h1>
-            <>
-                <input value={text} onChange={onChangeHandler}/>
-                <button onClick={onClickHandlerAddTask}>{'+'}</button>
-            </>
+            <InputUniversal
+                buttonTitle={'+'}
+                callback={(title) => {
+                    props.addTask(props.id, title)
+                }}
+            />
             <ul>
                 {props.tasks.map((el) =>
                     <li key={el.id}

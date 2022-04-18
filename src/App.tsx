@@ -3,6 +3,7 @@ import './App.css';
 import {Todolist} from "./Components/Todolist/Todolist";
 import {v1} from "uuid";
 import s from "./Components/Todolist/Todolist.module.css";
+import {InputUniversal} from "./Components/InputUniversal/InputUniversal";
 
 function App() {
     const todolistID1 = v1();
@@ -30,17 +31,18 @@ function App() {
         tasks[todolistID] = [{id: v1(), title: newTitle, isDone: false}, ...tasks[todolistID]]
         setTasks({...tasks})
     }
+
     const removeTask = (todolistID: string, taskID: string) => {
-        tasks[todolistID] = tasks[todolistID].filter( (el) => el.id !== taskID)
+        tasks[todolistID] = tasks[todolistID].filter((el) => el.id !== taskID)
         setTasks({...tasks})
     }
-    let [title, setTitle] = useState('')
-    const addTodolist = () => {
+
+    const addTodolist = (title: string) => {
         let newTodolistID = v1()
         setTodolists([{id: newTodolistID, title: title, filter: 'all'}, ...todolists])
-        setTasks({[newTodolistID]:[],...tasks})
-        setTitle('')
+        setTasks({[newTodolistID]: [], ...tasks})
     }
+
     const removeTodolist = (todolistID: string) => {
         setTodolists(todolists.filter(t => t.id !== todolistID))
         delete tasks[todolistID]
@@ -50,11 +52,12 @@ function App() {
         <div>
             <div className={s.todolistField}>
                 <div>{'Add NEW Todolist'}</div>
-                <>
-                    <input value={title} onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                        setTitle(e.currentTarget.value)}}/>
-                    <button onClick={addTodolist}>{'+'}</button>
-                </>
+                <InputUniversal
+                    buttonTitle={'+'}
+                    callback={(title) => {
+                        addTodolist(title)
+                    }}
+                />
             </div>
             <div className={'App'}>
                 {todolists.map((td) =>
