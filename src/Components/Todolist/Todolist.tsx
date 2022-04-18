@@ -1,6 +1,7 @@
 import React from 'react';
 import s from './Todolist.module.css'
 import {InputUniversal} from "../InputUniversal/InputUniversal";
+import {EditableSpan} from "../EditableSpan/EditableSpan";
 
 export type TasksPropsType = {
     id: string
@@ -28,13 +29,13 @@ export const Todolist = (props: TodolistPropsType) => {
 
     return (
         <div className={s.todolistField}>
-            <h1>
-                <span>{props.title}</span>
+            <h2>
+                <EditableSpan text={props.title}/>
                 <button
                     onClick={onClickHandlerRemoveTodolist}>
                     {'x'}
                 </button>
-            </h1>
+            </h2>
             <InputUniversal
                 buttonTitle={'+'}
                 callback={(title) => {
@@ -46,7 +47,7 @@ export const Todolist = (props: TodolistPropsType) => {
                     <li key={el.id}
                         className={s.liElement}>
                         <input type={"checkbox"} checked={el.isDone}/>
-                        <span>{el.title}</span>
+                        <EditableSpan text={el.title}/>
                         <button
                             onClick={() => {
                                 onClickHandlerRemoveTask(el.id)
