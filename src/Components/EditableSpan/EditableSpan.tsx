@@ -28,6 +28,7 @@ export const EditableSpan = (props: EditableSpanPropsType) => {
             {editable
                 ? <span>
                     <input
+                        autoFocus
                         placeholder={'Enter text...'}
                         value={error ? "" : inputText}
                         onChange={onChangeHandler}

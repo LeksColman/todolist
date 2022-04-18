@@ -1,9 +1,11 @@
 import React, {useState} from 'react';
 import './App.css';
-import {Todolist} from "./Components/Todolist/Todolist";
+import {FilterButtonsPropsType, Todolist} from "./Components/Todolist/Todolist";
 import {v1} from "uuid";
 import s from "./Components/Todolist/Todolist.module.css";
 import {InputUniversal} from "./Components/InputUniversal/InputUniversal";
+
+export type FilterValueType = 'all' | 'active' | 'completed'
 
 function App() {
     const todolistID1 = v1();
@@ -27,6 +29,12 @@ function App() {
         ],
     })
 
+    let filterButtons: FilterButtonsPropsType[] = [
+        {id: v1(), title: 'All', filterValue: 'all'},
+        {id: v1(), title: 'Active', filterValue: 'active'},
+        {id: v1(), title: 'Completed', filterValue: 'completed'},
+    ]
+
     const addTask = (todolistID: string, newTitle: string) => {
         tasks[todolistID] = [{id: v1(), title: newTitle, isDone: false}, ...tasks[todolistID]]
         setTasks({...tasks})
@@ -48,6 +56,10 @@ function App() {
         delete tasks[todolistID]
     }
 
+    const changeTodolistFilter = (todolistID: string, filterValue: FilterValueType) => {
+        setTodolists(todolists.map((td) => td.id === todolistID ? {...td, filter: filterValue} : td))
+    }
+
     return (
         <div>
             <div className={s.todolistField}>
@@ -60,16 +72,28 @@ function App() {
                 />
             </div>
             <div className={'App'}>
-                {todolists.map((td) =>
-                    <Todolist
-                        key={td.id}
-                        id={td.id}
-                        title={td.title}
-                        tasks={tasks[td.id]}
-                        addTask={addTask}
-                        removeTask={removeTask}
-                        removeTodolist={removeTodolist}
-                    />)}
+                {todolists.map((td) => {
+                    let tasksForTodolist = tasks[td.id]
+                    if (td.filter === 'active') {
+                        tasksForTodolist = tasks[td.id].filter(task => !task.isDone)
+                    }
+                    if (td.filter === 'completed') {
+                        tasksForTodolist = tasks[td.id].filter(task => task.isDone)
+                    }
+                    return (
+                        <Todolist
+                            key={td.id}
+                            id={td.id}
+                            title={td.title}
+                            tasks={tasksForTodolist}
+                            addTask={addTask}
+                            removeTask={removeTask}
+                            removeTodolist={removeTodolist}
+                            changeTodolistFilter={changeTodolistFilter}
+                            filterButtons={filterButtons}
+                        />
+                    )
+                })}
             </div>
         </div>
     );
