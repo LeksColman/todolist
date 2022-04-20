@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import './App.css';
-import {FilterButtonsPropsType, Todolist} from "./Components/Todolist/Todolist";
+import {FilterButtonsType, Todolist, TodolistType} from "./Components/Todolist/Todolist";
 import {v1} from "uuid";
 import s from "./Components/Todolist/Todolist.module.css";
 import {InputUniversal} from "./Components/InputUniversal/InputUniversal";
@@ -11,7 +11,7 @@ function App() {
     const todolistID1 = v1();
     const todolistID2 = v1();
 
-    let [todolists, setTodolists] = useState([
+    let [todolists, setTodolists] = useState<TodolistType[]>([
         {id: todolistID1, title: "Todolist #1", filter: 'all'},
         {id: todolistID2, title: "Todolist #2", filter: 'all'},
     ])
@@ -29,7 +29,7 @@ function App() {
         ],
     })
 
-    let filterButtons: FilterButtonsPropsType[] = [
+    let filterButtons: FilterButtonsType[] = [
         {id: v1(), title: 'All', filterValue: 'all'},
         {id: v1(), title: 'Active', filterValue: 'active'},
         {id: v1(), title: 'Completed', filterValue: 'completed'},
@@ -50,6 +50,11 @@ function App() {
                 tasks[todolistID].map((el) => el.id === taskID ? {...el, isDone: statusValue} : el)})
     }
 
+    const changeTaskTitle = (todolistID: string, taskID: string, newTitle: string) => {
+        setTasks({...tasks, [todolistID]:
+                tasks[todolistID].map((el) => el.id === taskID ? {...el, title: newTitle} : el)})
+    }
+
     const addTodolist = (title: string) => {
         let newTodolistID = v1()
         setTodolists([{id: newTodolistID, title: title, filter: 'all'}, ...todolists])
@@ -63,6 +68,10 @@ function App() {
 
     const changeTodolistFilter = (todolistID: string, filterValue: FilterValueType) => {
         setTodolists(todolists.map((td) => td.id === todolistID ? {...td, filter: filterValue} : td))
+    }
+
+    const changeTodolistTitle = (todolistID: string, newTitle: string) => {
+        setTodolists(todolists.map((td) => td.id === todolistID ? {...td, title: newTitle} : td))
     }
 
     return (
@@ -97,6 +106,8 @@ function App() {
                             changeTodolistFilter={changeTodolistFilter}
                             filterButtons={filterButtons}
                             changeTaskStatus={changeTaskStatus}
+                            changeTaskTitle = {changeTaskTitle}
+                            changeTodolistTitle = {changeTodolistTitle}
                         />
                     )
                 })}

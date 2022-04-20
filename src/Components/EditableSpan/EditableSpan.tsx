@@ -3,6 +3,7 @@ import s from "../EditableSpan/EditableSpan.module.css";
 
 type EditableSpanPropsType = {
     text: string
+    callBack: (text: string) => void
 }
 
 export const EditableSpan = (props: EditableSpanPropsType) => {
@@ -21,6 +22,7 @@ export const EditableSpan = (props: EditableSpanPropsType) => {
     const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
         setInputText(e.currentTarget.value)
         setError(false)
+        props.callBack(inputText)
     }
 
     return (
